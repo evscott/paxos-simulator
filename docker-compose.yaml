@@ -1,0 +1,133 @@
+version: '3'
+
+services:
+
+  node-a:
+    container_name: node-a
+    image: basic-paxos:latest
+    hostname: node-a
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9846:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-b:
+    container_name: node-b
+    image: basic-paxos:latest
+    hostname: node-b
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9847:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-c:
+    container_name: node-c
+    image: basic-paxos:latest
+    hostname: node-c
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9848:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-d:
+    container_name: node-d
+    image: basic-paxos:latest
+    hostname: node-d
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9849:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-e:
+    container_name: node-e
+    image: basic-paxos:latest
+    hostname: node-e
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9850:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-f:
+    container_name: node-f
+    image: basic-paxos:latest
+    hostname: node-f
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9851:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-g:
+    container_name: node-g
+    image: basic-paxos:latest
+    hostname: node-g
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9852:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-h:
+    container_name: node-h
+    image: basic-paxos:latest
+    hostname: node-h
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9853:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+  node-i:
+    container_name: node-i
+    image: basic-paxos:latest
+    hostname: node-i
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - pax-net
+    ports:
+      - 9854:2020
+    labels:
+      kompose.service.type: LoadBalancer
+
+networks:
+  pax-net:
+    driver: bridge
