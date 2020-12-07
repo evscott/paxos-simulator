@@ -13,11 +13,10 @@ type Config struct {
 	Learner node.Learner
 }
 
-func Activate(port uint16, acceptors []uint16) {
+func Activate(port uint16) {
 	c := &Config{
 		Learner: node.Learner {
 			Port: port,
-			Acceptors: acceptors,
 		},
 	}
 
