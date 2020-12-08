@@ -1,9 +1,11 @@
 package main
 
 import (
-	BasicPaxos "github.com/paxos/internal/app/multi-paxos"
+	"github.com/paxos/cmd/app/basic-paxos"
+	"github.com/paxos/cmd/app/multi-paxos"
 )
 
 func main() {
 	BasicPaxos.Init()
+	multiPaxos.Init()
 }

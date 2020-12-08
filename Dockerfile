@@ -1,17 +1,11 @@
 FROM golang:latest
-
 LABEL maintainer="Eliot Scott <eliotvscott@gmail.com>"
 
 WORKDIR /
 
-COPY go.mod ./
+COPY go.mod .
+COPY artifacts /artifacts
+COPY cmd /cmd
+COPY /Multi //Multi
 
-RUN go mod download
-
-COPY . .
-
-RUN go build -o basic-paxos .
-
-EXPOSE 9090
-
-CMD ["./basic-paxos"]
+CMD ["go", "run", "cmd/main.go"]
