@@ -3,8 +3,8 @@ client ->> proposer 9001: Request: Foo
 Note over client,proposer 9001: Initialize round 1
 
 proposer 9001->> acceptor 9003:(1) Prepare
-acceptor 9003-->> proposer 9001:(1) Promise
 proposer 9001->> acceptor 9004:(1) Prepare
+acceptor 9003-->> proposer 9001:(1) Promise
 acceptor 9004-->> proposer 9001:(1) Promise
 proposer 9001->> acceptor 9003:(1) Accept: Foo
 proposer 9001->> acceptor 9004:(1) Accept: Foo
@@ -16,10 +16,10 @@ Note over client,proposer 9001: Initialize round 2
 
 proposer 9001->> acceptor 9004:(2) Prepare
 acceptor 9004-->> proposer 9001:(2) Promise
-proposer 9001->> acceptor 9003:(2) Prepare
-acceptor 9003-->> proposer 9001:(2) Promise
+proposer 9001->> acceptor 9002:(2) Prepare
+acceptor 9002-->> proposer 9001:(2) Promise
 proposer 9001->> acceptor 9004:(2) Accept: Bar
+proposer 9001->> acceptor 9002:(2) Accept: Bar
 acceptor 9004-->> learner 9005:(2) Accepted: Bar
-proposer 9001->> acceptor 9003:(2) Accept: Bar
+acceptor 9002-->> learner 9005:(2) Accepted: Bar
 learner 9005->>+ client: Bar was accepted as the value!
-acceptor 9003-->> learner 9005:(2) Accepted: Bar

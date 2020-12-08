@@ -1,3 +1,4 @@
 .idea
-cmd/artifacts/
+cmd/artifacts/*.txt
+cmd/artifacts/*.pdf
 basic-paxos.iml

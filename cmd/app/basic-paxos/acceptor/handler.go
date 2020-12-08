@@ -3,6 +3,7 @@ package Acceptor
 import (
 	"fmt"
 	"github.com/paxos/cmd/pkg/model/message"
+	"github.com/paxos/cmd/pkg/shared/constant"
 	"github.com/paxos/cmd/pkg/shared/util"
 )
 
@@ -19,7 +20,7 @@ func (c *Config) handlePrepare(incomingMessage *message.Message) error {
 		if prepareMessage.Nonce <= promise.Nonce {
 			outgoingMessage := &message.Message{
 				Source: c.Acceptor.Port,
-				Type:   message.NACK,
+				Type:   constant.NACK,
 				Payload: message.Nack{
 					Nonce: promise.Nonce,
 				},
@@ -49,7 +50,7 @@ func (c *Config) handlePrepare(incomingMessage *message.Message) error {
 	// Construct the promise message
 	outgoingMessage := &message.Message{
 		Source:  c.Acceptor.Port,
-		Type:    message.PROMISE,
+		Type:    constant.PROMISE,
 		Payload: promise,
 	}
 
@@ -82,7 +83,7 @@ func (c *Config) handleAccept(incomingMessage *message.Message) error {
 		if acceptMessage.Nonce < promise.Nonce {
 			outgoingMessage := &message.Message{
 				Source: c.Acceptor.Port,
-				Type:   message.NACK,
+				Type:   constant.NACK,
 				Payload: message.Nack{
 					Nonce: promise.Nonce,
 				},
@@ -100,7 +101,7 @@ func (c *Config) handleAccept(incomingMessage *message.Message) error {
 	// Construct the the accept message
 	outgoingMessage := &message.Message{
 		Source: c.Acceptor.Port,
-		Type:   message.ACCEPTED,
+		Type:   constant.ACCEPTED,
 		Payload: message.Accepted{
 			Nonce: acceptMessage.Nonce,
 			Value: acceptMessage.Value,

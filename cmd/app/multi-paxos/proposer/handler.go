@@ -3,6 +3,7 @@ package Proposer
 import (
 	"fmt"
 	"github.com/paxos/cmd/pkg/model/message"
+	"github.com/paxos/cmd/pkg/shared/constant"
 	"github.com/paxos/cmd/pkg/shared/util"
 )
 
@@ -19,7 +20,7 @@ func (c *Config) handleRequest(incomingMessage *message.Message) error {
 	// Construct the proposal message for the new round
 	outgoingMessage := &message.Message{
 		Source: c.Proposer.Port,
-		Type:   message.PREPARE,
+		Type:   constant.PREPARE,
 		Payload: message.Prepare{
 			Nonce: proposal.Nonce,
 			Round: len(c.Proposer.Proposals),
@@ -67,7 +68,7 @@ func (c *Config) handlePromise(incomingMessage *message.Message) error {
 	}
 	outgoingMessage := &message.Message{
 		Source:  c.Proposer.Port,
-		Type:    message.ACCEPT,
+		Type:    constant.ACCEPT,
 		Payload: payload,
 	}
 
@@ -100,7 +101,7 @@ func (c *Config) handleNack(incomingMessage *message.Message) error {
 	c.Proposer.Proposals[nackMessage.Round-1].Promises = []message.Promise{}
 	outgoingMessage := &message.Message{
 		Source:  c.Proposer.Port,
-		Type:    message.PREPARE,
+		Type:    constant.PREPARE,
 		Payload: message.Prepare{Nonce: c.Proposer.Proposals[nackMessage.Round-1].Nonce},
 	}
 

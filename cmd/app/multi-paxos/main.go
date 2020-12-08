@@ -6,6 +6,7 @@ import (
 	Learner "github.com/paxos/cmd/app/multi-paxos/learner"
 	Proposer "github.com/paxos/cmd/app/multi-paxos/proposer"
 	"github.com/paxos/cmd/pkg/model/message"
+	"github.com/paxos/cmd/pkg/shared/constant"
 	"github.com/paxos/cmd/pkg/shared/util"
 	"time"
 )
@@ -31,7 +32,7 @@ func Init() {
 	// Request that proposer 9000 propose the value "Foo"
 	message1 := &message.Message{
 		Source:  0,
-		Type:    message.REQUEST,
+		Type:    constant.REQUEST,
 		Payload: message.Request{Value: "Foo"},
 	}
 
@@ -45,7 +46,7 @@ func Init() {
 	// Request that proposer 9000 propose the value "Bar"
 	message2 := &message.Message{
 		Source:  0,
-		Type:    message.REQUEST,
+		Type:    constant.REQUEST,
 		Payload: message.Request{Value: "Bar"},
 	}
 
