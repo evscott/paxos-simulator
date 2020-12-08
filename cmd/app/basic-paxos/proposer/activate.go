@@ -13,6 +13,9 @@ type Config struct {
 	Proposer node.Proposer
 }
 
+// Activate activates a proposer node
+// An proposer must be initialized with a port number to be identified with and a set of acceptor nodes
+// which it may communicate with
 func Activate(port int, acceptors []int) {
 	c := &Config{
 		Proposer: node.Proposer{

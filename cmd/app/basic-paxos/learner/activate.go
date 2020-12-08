@@ -13,6 +13,8 @@ type Config struct {
 	Learner node.Learner
 }
 
+// Activate activates a learner node
+// A learner must be initialized with a port number to be identified with
 func Activate(port int) {
 	c := &Config{
 		Learner: node.Learner{

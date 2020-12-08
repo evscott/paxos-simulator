@@ -2,27 +2,27 @@ sequenceDiagram
 client ->> proposer 8001: Request: Foo
 Note over client,proposer 8001: Initialize round 1
 
-proposer 8001->> acceptor 8005:(1) Prepare
 proposer 8001->> acceptor 8003:(1) Prepare
-acceptor 8005-->> proposer 8001:(1) Promise
+proposer 8001->> acceptor 8004:(1) Prepare
 acceptor 8003-->> proposer 8001:(1) Promise
-proposer 8001->> acceptor 8005:(1) Accept: Foo
+acceptor 8004-->> proposer 8001:(1) Promise
 proposer 8001->> acceptor 8003:(1) Accept: Foo
-acceptor 8005-->> learner 8006:(1) Accepted: Foo
+proposer 8001->> acceptor 8004:(1) Accept: Foo
 acceptor 8003-->> learner 8006:(1) Accepted: Foo
+acceptor 8004-->> learner 8006:(1) Accepted: Foo
 learner 8006->>+ client: Foo was accepted as the value!
 client ->> proposer 8002: Request: Bar
 Note over client,proposer 8002: Initialize round 2
 
-proposer 8002->> acceptor 8004:(1) Prepare
-acceptor 8004-->> proposer 8002:(1) Promise
 proposer 8002->> acceptor 8005:(1) Prepare
-acceptor 8005--x proposer 8002:(1) Nack
-proposer 8002->> acceptor 8004:(2) Prepare
-acceptor 8004-->> proposer 8002:(2) Promise
+acceptor 8005-->> proposer 8002:(1) Promise
+proposer 8002->> acceptor 8003:(1) Prepare
+acceptor 8003--x proposer 8002:(1) Nack
 proposer 8002->> acceptor 8005:(2) Prepare
-acceptor 8005-->> proposer 8002:(2) Promise: {Value:Foo Nonce:1}
-proposer 8002->> acceptor 8004:(2) Accept: Foo
-acceptor 8004-->> learner 8006:(2) Accepted: Foo
+acceptor 8005-->> proposer 8002:(2) Promise
+proposer 8002->> acceptor 8003:(2) Prepare
+acceptor 8003-->> proposer 8002:(2) Promise: {Value:Foo Nonce:1}
 proposer 8002->> acceptor 8005:(2) Accept: Foo
 acceptor 8005-->> learner 8006:(2) Accepted: Foo
+proposer 8002->> acceptor 8003:(2) Accept: Foo
+acceptor 8003-->> learner 8006:(2) Accepted: Foo

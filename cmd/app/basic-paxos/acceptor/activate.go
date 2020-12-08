@@ -13,6 +13,9 @@ type Config struct {
 	Acceptor node.Acceptor
 }
 
+// Activate activates an acceptor node
+// An acceptor must be initialized with a port number to be identified with and a set of learner nodes
+// which it may communicate with
 func Activate(port int, learners []int) {
 	c := &Config{
 		Acceptor: node.Acceptor{

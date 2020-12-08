@@ -10,9 +10,12 @@ import (
 	"time"
 )
 
+// Initializes an instance of Basic-Paxos with several nodes: two proposers, three acceptors, and one learner
+// The instance simulates a scenario where a client submits two requests to different proposers with different values
+// The first request submitted *should* be accepted as the value on the network
 func Init() {
 
-	fmt.Println("Basic Paxos beginning...")
+	fmt.Println("Initializing Basic-Paxos...")
 	util.CreateNewFile("basic")
 
 	go Proposer.Activate(8001, []int{8003, 8004, 8005})
@@ -25,7 +28,7 @@ func Init() {
 	// Wait for nodes to activate
 	time.Sleep(time.Second / 100)
 
-	// Request that proposer 8001 submit the value "Foo"
+	// Request that proposer 8001 propose the value "Foo"
 	message1 := &message.Message{
 		Source:  0,
 		Type:    message.REQUEST,
@@ -35,10 +38,10 @@ func Init() {
 	util.WriteToBasicFile(fmt.Sprintf("Note over client,proposer 8001: Initialize round 1\n"))
 	util.SendMessage(message1, 8001)
 
-	// Wait some time for Paxos to reach consensus, and then fire another message
+	// Wait some time for Paxos to reach consensus
 	time.Sleep(time.Second / 10)
 
-	// Request that proposer 8002 submit the value "Bar"
+	// Request that proposer 8002 propose the value "Bar"
 	message2 := &message.Message{
 		Source:  0,
 		Type:    message.REQUEST,
