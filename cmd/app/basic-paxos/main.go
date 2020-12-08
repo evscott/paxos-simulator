@@ -31,8 +31,12 @@ func Init() {
 		Type:    message.REQUEST,
 		Payload: message.Request{Value: "Foo"},
 	}
-	util.WriteToBasicFile(fmt.Sprintf("client -->> proposer 8001: Request: %v", "Foo"))
+	util.WriteToBasicFile(fmt.Sprintf("client ->> proposer 8001: Request: %v", "Foo"))
+	util.WriteToBasicFile(fmt.Sprintf("Note over client,proposer 8001: Initialize round 1\n"))
 	util.SendMessage(message1, 8001)
+
+	// Wait some time for Paxos to reach consensus, and then fire another message
+	time.Sleep(time.Second / 10)
 
 	// Request that proposer 8002 submit the value "Bar"
 	message2 := &message.Message{
@@ -40,7 +44,8 @@ func Init() {
 		Type:    message.REQUEST,
 		Payload: message.Request{Value: "Bar"},
 	}
-	util.WriteToBasicFile(fmt.Sprintf("client -->> proposer 8002: Request: %v", "Bar"))
+	util.WriteToBasicFile(fmt.Sprintf("client ->> proposer 8002: Request: %v", "Bar"))
+	util.WriteToBasicFile(fmt.Sprintf("Note over client,proposer 8002: Initialize round 2\n"))
 	util.SendMessage(message2, 8002)
 
 	// Wait some time for Paxos to reach consensus

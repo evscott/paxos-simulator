@@ -21,7 +21,7 @@ func (c *Config) handlePrepare(incomingMessage *message.Message) error {
 					Nonce: promise.Nonce,
 				},
 			}
-			util.WriteToBasicFile(fmt.Sprintf("acceptor %d-->> proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, prepareMessage.Nonce))
+			util.WriteToBasicFile(fmt.Sprintf("acceptor %d--x proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, prepareMessage.Nonce))
 			if err := util.SendMessage(outgoingMessage, incomingMessage.Source); err != nil {
 				return err
 			}
@@ -74,7 +74,7 @@ func (c *Config) handleAccept(incomingMessage *message.Message) error {
 					Nonce: promise.Nonce,
 				},
 			}
-			util.WriteToBasicFile(fmt.Sprintf("acceptor %d-->> proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, acceptMessage.Nonce))
+			util.WriteToBasicFile(fmt.Sprintf("acceptor %d--x proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, acceptMessage.Nonce))
 			if err := util.SendMessage(outgoingMessage, incomingMessage.Source); err != nil {
 				return err
 			}

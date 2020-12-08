@@ -45,7 +45,6 @@ func (c *Config) handlePromise(incomingMessage *message.Message) error {
 	c.Proposer.Proposals[0].RegisterPromise(*promiseMessage)
 
 	if c.Proposer.Proposals[0].HasInsufficientNumberOfPromises() {
-		// TODO exit gracefully
 		return nil
 	}
 

@@ -22,7 +22,7 @@ func (c *Config) handlePrepare(incomingMessage *message.Message) error {
 					Round: prepareMessage.Round,
 				},
 			}
-			util.WriteToMultiFile(fmt.Sprintf("acceptor %d-->> proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, prepareMessage.Nonce))
+			util.WriteToMultiFile(fmt.Sprintf("acceptor %d--x proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, prepareMessage.Nonce))
 			if err := util.SendMessage(outgoingMessage, incomingMessage.Source); err != nil {
 				return err
 			}
@@ -77,7 +77,7 @@ func (c *Config) handleAccept(incomingMessage *message.Message) error {
 					Round: acceptMessage.Round,
 				},
 			}
-			util.WriteToMultiFile(fmt.Sprintf("acceptor %d-->> proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, acceptMessage.Nonce))
+			util.WriteToMultiFile(fmt.Sprintf("acceptor %d--x proposer %d:(%d) Nack", c.Acceptor.Port, incomingMessage.Source, acceptMessage.Nonce))
 			if err := util.SendMessage(outgoingMessage, incomingMessage.Source); err != nil {
 				return err
 			}

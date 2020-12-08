@@ -2,20 +2,32 @@ version: '3'
 
 services:
 
-  node-a:
-    container_name: node-a
-    image: basic-paxos:latest
-    hostname: node-a
+  paxos:
+    container_name: paxos
+    image: paxos:latest
+    hostname: paxos
     build:
       context: .
       dockerfile: Dockerfile
-    networks:
-      - pax-net
-    ports:
-      - 9846:2020
-    labels:
-      kompose.service.type: LoadBalancer
+    volumes:
+      - ./artifacts:/artifacts
 
-networks:
-  pax-net:
-    driver: bridge
+  basic-paxos-mermaid:
+    container_name: basic-paxos-mermaid
+    image: minlag/mermaid-cli:latest
+    hostname: mermaid
+    command: ["-i", "/artifacts/basic-paxos-output.txt", "-o", "/artifacts/basic-paxos-output.pdf"]
+    depends_on:
+      - paxos
+    volumes:
+      - ./artifacts:/artifacts
+
+  multi-paxos-mermaid:
+    container_name: multi-paxos-mermaid
+    image: minlag/mermaid-cli:latest
+    hostname: mermaid
+    command: [ "-i", "/artifacts/multi-paxos-output.txt", "-o", "/artifacts/multi-paxos-output.pdf" ]
+    depends_on:
+      - paxos
+    volumes:
+      - ./artifacts:/artifacts
