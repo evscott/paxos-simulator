@@ -14,11 +14,11 @@ func Init() {
 
 	fmt.Println("Basic Paxos!")
 
-	go Proposer.Activate(9001, []uint16{9003, 9004, 9005})
-	go Proposer.Activate(9002, []uint16{9003, 9004, 9005})
-	go Acceptor.Activate(9003, []uint16{9006, 9007})
-	go Acceptor.Activate(9004, []uint16{9006, 9007})
-	go Acceptor.Activate(9005, []uint16{9006, 9007})
+	go Proposer.Activate(9001, []int{9003, 9004, 9005})
+	go Proposer.Activate(9002, []int{9003, 9004, 9005})
+	go Acceptor.Activate(9003, []int{9006, 9007})
+	go Acceptor.Activate(9004, []int{9006, 9007})
+	go Acceptor.Activate(9005, []int{9006, 9007})
 	go Learner.Activate(9006)
 	go Learner.Activate(9007)
 
@@ -43,6 +43,4 @@ func Init() {
 
 	// Wait some time for Paxos to reach consensus
 	time.Sleep(time.Second/10)
-
-	fmt.Println("What the hell...")
 }

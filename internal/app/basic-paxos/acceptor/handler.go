@@ -32,10 +32,10 @@ func (c *Config) handlePrepare(incomingMessage *message.Message) error {
 	promise := message.Promise{
 		Nonce: prepareMessage.Nonce,
 	}
-	if c.Acceptor.HasAcceptedProposal() {
-		promise.Proposal = c.Acceptor.AcceptedProposal
+	if c.Acceptor.HasAcceptedProposal(1) {
+		promise.Proposal = c.Acceptor.AcceptedProposals[0]
 	}
-	c.Acceptor.RegisterPromise(promise)
+	c.Acceptor.AddPromise(promise)
 
 	outgoingMessage := &message.Message{
 		Source:  c.Acceptor.Port,
@@ -44,7 +44,7 @@ func (c *Config) handlePrepare(incomingMessage *message.Message) error {
 	}
 
 	// Send 'PROMISE' message to proposer
-	if c.Acceptor.HasAcceptedProposal() {
+	if c.Acceptor.HasAcceptedProposal(1) {
 		util.WriteToFile(fmt.Sprintf("%d-->>%d:(%d) Promise: %+v", c.Acceptor.Port, incomingMessage.Source, prepareMessage.Nonce, promise.Proposal))
 		if err := util.SendMessage(outgoingMessage, incomingMessage.Source); err != nil {
 			return err
@@ -81,10 +81,7 @@ func (c *Config) handleAccept(incomingMessage *message.Message) error {
 		}
 	}
 
-	c.Acceptor.AcceptedProposal = message.Proposal{
-		Nonce: acceptMessage.Nonce,
-		Value: acceptMessage.Value,
-	}
+	c.Acceptor.AddAcceptedProposal(acceptMessage.Value, acceptMessage.Nonce)
 
 	outgoingMessage := &message.Message{
 		Source: c.Acceptor.Port,

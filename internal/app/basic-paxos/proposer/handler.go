@@ -12,19 +12,17 @@ func (c *Config) handleRequest(incomingMessage *message.Message) error {
 		return err
 	}
 
-	c.Proposer.CurrentProposal.Value = requestMessage.Value
-	c.Proposer.CurrentProposal.Nonce = c.Proposer.GetNonce()
-	c.Proposer.CurrentProposal.Quorum = c.Proposer.GetQuorum()
+	c.Proposer.AddProposal(requestMessage.Value)
 
 	outgoingMessage := &message.Message{
 		Source:  c.Proposer.Port,
 		Type:    message.PREPARE,
-		Payload: message.Prepare{Nonce: c.Proposer.CurrentProposal.Nonce},
+		Payload: message.Prepare{Nonce: c.Proposer.Proposals[0].Nonce},
 	}
 
 	// Broadcast 'PREPARE' message to the selected quorum of acceptors
-	for _, acceptor := range c.Proposer.CurrentProposal.Quorum {
-		util.WriteToFile(fmt.Sprintf("%d->>%d:(%d) Prepare", c.Proposer.Port, acceptor, c.Proposer.CurrentProposal.Nonce))
+	for _, acceptor := range c.Proposer.Proposals[0].Quorum {
+		util.WriteToFile(fmt.Sprintf("%d->>%d:(%d) Prepare", c.Proposer.Port, acceptor, c.Proposer.Proposals[0].Nonce))
 		if err := util.SendMessage(outgoingMessage, acceptor); err != nil {
 			return err
 		}
@@ -39,25 +37,25 @@ func (c *Config) handlePromise(incomingMessage *message.Message) error {
 		return err
 	}
 
-	if c.Proposer.CurrentProposal.NonceDoesNotEqual(promiseMessage.Nonce) {
+	if c.Proposer.Proposals[0].NonceDoesNotEqual(promiseMessage.Nonce) {
 		// TODO add error
 		return nil
 	}
 
-	c.Proposer.CurrentProposal.RegisterPromise(*promiseMessage)
+	c.Proposer.Proposals[0].RegisterPromise(*promiseMessage)
 
-	if c.Proposer.CurrentProposal.HasInsufficientNumberOfPromises() {
+	if c.Proposer.Proposals[0].HasInsufficientNumberOfPromises() {
 		// TODO exit gracefully
 		return nil
 	}
 
 	payload := message.Accept{
-		Nonce: c.Proposer.CurrentProposal.Nonce,
+		Nonce: c.Proposer.Proposals[0].Nonce,
 	}
-	if c.Proposer.CurrentProposal.HasAcceptedValueToBroadcast() {
-		payload.Value = c.Proposer.CurrentProposal.GetAcceptedValueToBroadcast()
+	if c.Proposer.Proposals[0].HasAcceptedValueToBroadcast() {
+		payload.Value = c.Proposer.Proposals[0].GetAcceptedValueToBroadcast()
 	} else {
-		payload.Value = c.Proposer.CurrentProposal.Value
+		payload.Value = c.Proposer.Proposals[0].Value
 	}
 
 	outgoingMessage := &message.Message{
@@ -67,7 +65,7 @@ func (c *Config) handlePromise(incomingMessage *message.Message) error {
 	}
 
 	// Broadcast 'ACCEPT' message to the proposal's associated quorum of acceptors
-	for _, acceptor := range c.Proposer.CurrentProposal.Quorum {
+	for _, acceptor := range c.Proposer.Proposals[0].Quorum {
 		util.WriteToFile(fmt.Sprintf("%d->>%d:(%d) Accept: %s", c.Proposer.Port, acceptor, payload.Nonce, payload.Value))
 		if err := util.SendMessage(outgoingMessage, acceptor); err != nil {
 			return err
@@ -93,18 +91,18 @@ func (c *Config) handleNack(incomingMessage *message.Message) error {
 	}
 
 	c.Proposer.CurrentNonce = nackMessage.Nonce+1
-	c.Proposer.CurrentProposal.Nonce = c.Proposer.CurrentNonce
-	c.Proposer.CurrentProposal.Promises = []message.Promise{}
+	c.Proposer.Proposals[0].Nonce = c.Proposer.CurrentNonce
+	c.Proposer.Proposals[0].Promises = []message.Promise{}
 
 	outgoingMessage := &message.Message{
 		Source:  c.Proposer.Port,
 		Type:    message.PREPARE,
-		Payload: message.Prepare{Nonce: c.Proposer.CurrentProposal.Nonce},
+		Payload: message.Prepare{Nonce: c.Proposer.Proposals[0].Nonce},
 	}
 
 	// Broadcast updated 'PREPARE' message to the selected quorum of acceptors
-	for _, acceptor := range c.Proposer.CurrentProposal.Quorum {
-		util.WriteToFile(fmt.Sprintf("%d->>%d:(%d) Prepare", c.Proposer.Port, acceptor, c.Proposer.CurrentProposal.Nonce))
+	for _, acceptor := range c.Proposer.Proposals[0].Quorum {
+		util.WriteToFile(fmt.Sprintf("%d->>%d:(%d) Prepare", c.Proposer.Port, acceptor, c.Proposer.Proposals[0].Nonce))
 		if err := util.SendMessage(outgoingMessage, acceptor); err != nil {
 			return err
 		}

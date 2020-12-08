@@ -8,23 +8,23 @@ import (
 
 type Proposal struct {
 	Value    string
-	Nonce    uint32
-	Quorum   []uint16
+	Nonce    int
+	Quorum   []int
 	Promises []message.Promise
 }
 
 type Proposer struct {
-	Port            uint16
-	Acceptors       []uint16
-	CurrentProposal Proposal
-	CurrentNonce    uint32
+	Port         int
+	Acceptors    []int
+	Proposals    []Proposal
+	CurrentNonce int
 }
 
 ///////////////////////////
 //// Proposal Helpers ////
 //////////////////////////
 
-func (p *Proposal) NonceDoesNotEqual(nonce uint32) bool {
+func (p *Proposal) NonceDoesNotEqual(nonce int) bool {
 	return p.Nonce != nonce
 }
 
@@ -46,11 +46,11 @@ func (p *Proposal) HasAcceptedValueToBroadcast() bool {
 }
 
 func (p *Proposal) GetAcceptedValueToBroadcast() string {
-	nonce := uint32(0)
+	nonce := int(0)
 	value := ""
 
 	for _, promise := range p.Promises {
-		if nonce <  promise.Proposal.Nonce {
+		if nonce < promise.Proposal.Nonce {
 			nonce = promise.Proposal.Nonce
 			value = promise.Proposal.Value
 		}
@@ -63,13 +63,25 @@ func (p *Proposal) GetAcceptedValueToBroadcast() string {
 //// Proposer Helpers ////
 //////////////////////////
 
-func (p *Proposer) GetQuorum() []uint16 {
+func (p *Proposer) GetQuorum() []int {
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(p.Acceptors), func(i, j int) { p.Acceptors[i], p.Acceptors[j] = p.Acceptors[j], p.Acceptors[i] })
 	return p.Acceptors[:(len(p.Acceptors)/2)+1]
 }
 
-func (p *Proposer) GetNonce() uint32 {
+func (p *Proposer) GetNonce() int {
 	p.CurrentNonce++
 	return p.CurrentNonce
+}
+
+func (p *Proposer) AddProposal(value string) Proposal{
+	proposal :=  Proposal{
+		Value:    value,
+		Nonce:    p.GetNonce(),
+		Quorum:   p.GetQuorum(),
+	}
+
+	p.Proposals = append(p.Proposals, proposal)
+
+	return proposal
 }

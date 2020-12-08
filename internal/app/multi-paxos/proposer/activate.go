@@ -13,7 +13,7 @@ type Config struct {
 	Proposer node.Proposer
 }
 
-func Activate(port uint16, acceptors []uint16) {
+func Activate(port int, acceptors []int) {
 	c := &Config{
 		Proposer: node.Proposer{
 			Port:            port,

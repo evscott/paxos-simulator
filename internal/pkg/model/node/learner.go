@@ -1,7 +1,7 @@
 package node
 
 type Learner struct {
-	Port      uint16
-	Acceptors []uint16
+	Port      int
+	Acceptors []int
 	Logs      []string
 }

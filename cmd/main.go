@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/paxos/internal/app/basic-paxos"
+	BasicPaxos "github.com/paxos/internal/app/multi-paxos"
 )
 
 func main() {

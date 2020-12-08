@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func SendMessage(msg *message.Message, dest uint16) error {
+func SendMessage(msg *message.Message, dest int) error {
 	connOut, err := net.DialTimeout("tcp", fmt.Sprintf("127.0.0.1:%d",dest), time.Duration(10)*time.Second)
 	if err != nil {
 		if _, ok := err.(net.Error); ok {
