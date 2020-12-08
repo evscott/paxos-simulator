@@ -11,7 +11,7 @@ To run the project, simply call: `docker-compose up --build`. The program writes
 ## Examples
 
 ### Basic-Paxos
-![basic-paxos](./artifacts/basic-paxos-eample.png)
+![basic-paxos](./artifacts/basic-paxos-example.png)
 
 
 ### Multi-Paxos
