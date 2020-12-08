@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/paxos/cmd/pkg/model/message"
 	"github.com/paxos/cmd/pkg/model/node"
+	"github.com/paxos/cmd/pkg/shared/constant"
 	"log"
 	"net"
 )
@@ -45,14 +46,20 @@ func Activate(port int, acceptors []int) {
 		}
 
 		switch msg.Type {
-		case message.REQUEST:
-			c.handleRequest(msg)
+		case constant.REQUEST:
+			if err := c.handleRequest(msg); err != nil {
+				log.Fatalf("Failed to handle a [request]: %v\n", err)
+			}
 			break
-		case message.PROMISE:
-			c.handlePromise(msg)
+		case constant.PROMISE:
+			if err := c.handlePromise(msg); err != nil {
+				log.Fatalf("Failed to handle a [promise]: %v\n", err)
+			}
 			break
-		case message.NACK:
-			c.handleNack(msg)
+		case constant.NACK:
+			if err := c.handleNack(msg); err != nil {
+				log.Fatalf("Failed to handle a [nack]: %v\n", err)
+			}
 			break
 		}
 	}

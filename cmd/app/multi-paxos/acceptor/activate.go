@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/paxos/cmd/pkg/model/message"
 	"github.com/paxos/cmd/pkg/model/node"
+	"github.com/paxos/cmd/pkg/shared/constant"
 	"log"
 	"net"
 )
@@ -44,12 +45,17 @@ func Activate(port int, learners []int) {
 			log.Printf("Error decoding %v\n", err)
 		}
 
+
 		switch msg.Type {
-		case message.PREPARE:
-			c.handlePrepare(msg)
+		case constant.PREPARE:
+			if err := c.handlePrepare(msg); err != nil {
+				log.Fatalf("Failed to handle a [prepare]: %v\n", err)
+			}
 			break
-		case message.ACCEPT:
-			c.handleAccept(msg)
+		case constant.ACCEPT:
+			if err := c.handleAccept(msg); err != nil {
+				log.Fatalf("Failed to handle an [accept]: %v\n", err)
+			}
 			break
 		}
 	}

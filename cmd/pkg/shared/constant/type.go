@@ -1,4 +1,4 @@
-package message
+package constant
 
 type Type string
 

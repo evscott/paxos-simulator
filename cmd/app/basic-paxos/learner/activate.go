@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/paxos/cmd/pkg/model/message"
 	"github.com/paxos/cmd/pkg/model/node"
+	"github.com/paxos/cmd/pkg/shared/constant"
 	"log"
 	"net"
 )
@@ -43,8 +44,10 @@ func Activate(port int) {
 		}
 
 		switch msg.Type {
-		case message.ACCEPTED:
-			c.handleAccepted(msg)
+		case constant.ACCEPTED:
+			if err := c.handleAccepted(msg); err != nil {
+				log.Fatalf("Failed to handle an [accepted]: %v\n", err)
+			}
 			break
 		}
 	}

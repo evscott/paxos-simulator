@@ -39,10 +39,11 @@ type Response struct {
 }
 
 type Proposal struct {
-	Value string
-	Nonce int
+	Value string `json:"value"`
+	Nonce int    `json:"nonce"`
 }
 
+// Unmarshal is used to unmarshal payloads
 func Unmarshal(in interface{}, out interface{}) error {
 	if raw, err := json.Marshal(in); err != nil {
 		return err
